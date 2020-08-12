@@ -1,0 +1,77 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# CRANE v1.0.0
+
+Constrained Random Alteration of Network Edges (CRANE) is a computational method for sampling networks with fixed node strengths. This package also include CRANE integraction with ALPACA.
+
+## Installation
+
+You can install the released version of CRANE from [GitHub](https://github.com/PadiLab/CRANE) with:
+
+``` r
+library(devtools)
+install_github("PadiLab/CRANE")
+```
+
+## Publication
+
+**Generating Ensembles of Gene Regulatory Networks to Assess Robustness of Disease Modules**  
+James T Lim, Chen Chen, Adam D Grant, Megha Padi  
+bioRxiv 2020.07.12.198747; doi: https://doi.org/10.1101/2020.07.12.198747  
+url: https://www.biorxiv.org/content/10.1101/2020.07.12.198747v1  
+
+## Examples
+
+We have included network edge list from angiogenic ovarian cancer (ang) and non-angiogenic ovarian cancer (nonAng). The following are some example use:
+
+1. CRANE for network perturbation
+
+```{r example1}
+library(CRANE)
+head(ang)
+
+# Running CRANE for bipartite network
+newElist=crane.bipartite(ang,alpha=0.3)
+
+head(newElist)
+
+```
+
+2. CRANE integration with ALPACA
+```{r example2}
+library(ALPACA)
+library(CRANE)
+
+# Create Input Matrix nonAng as the baseline.
+input=cbind(nonAng,ang[,3])
+
+# Run ALPACA
+alp=alpaca(input,NULL,verbose = F)
+
+# Apply Crane
+alpListObject=alpaca.crane(input, alp, isParallel = T)
+
+# TF Results
+head(alpListObject$TF)
+
+# Gene Results
+head(alpListObject$Gene)
+```
+
+```{r pressure, echo = FALSE}
+
+```
+
